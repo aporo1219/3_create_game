@@ -1,0 +1,67 @@
+# ===============================
+# Unreal Engine .gitignore (for GitHub + LFS)
+# ===============================
+
+# Build artifacts and binaries
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+*.VC.db
+*.opensdf
+*.sdf
+*.sln
+*.suo
+.vs/
+.idea/
+.vscode/
+
+# Temporary and log files
+*.log
+*.tlog
+*.obj
+*.pdb
+*.idb
+*.user
+*.userprefs
+*.tmp
+*.bak
+*.old
+*.orig
+*.cache
+*.local
+*.lock
+
+# Engine files (if using source build)
+Engine/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore autosaves and backups
+*_BuiltData.uasset
+*_BuiltData.umap
+*.autosave
+
+# Optional IDE
+.vscode/
+.idea/
+
+# Unreal Generated Files
+Saved/
+Intermediate/
+DerivedDataCache/
+*.VC.db
+*.opensdf
+*.sdf
+*.sln
+.vs/
+
+# Ignore crash logs and editor backups
+CrashReportClient/
+*.dmp
+*.mdmp
+*.dump
