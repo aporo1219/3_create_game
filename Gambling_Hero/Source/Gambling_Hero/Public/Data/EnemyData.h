@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "EnemyActionData.h"
 #include "EnemyData.generated.h"
 
 /**
@@ -27,6 +28,9 @@ protected:
 	//“G‚Ì–hŒä’l
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enemy")
 	int32 m_DefencePower = 5;
+	//“G‚Ìs“®
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Enemy")
+	TArray<TObjectPtr<UEnemyActionData>> m_Actions;
 
 public:
 	//•Ï”æ“¾ŠÖ”
@@ -34,4 +38,6 @@ public:
 	int32 GetMaxHP() const { return m_MaxHP; };
 	int32 GetAttackPower() const { return m_AttackPower; };
 	int32 GetDefencePower() const {return  m_DefencePower;};
+	const TArray<TObjectPtr<UEnemyActionData>>&
+		GetActions() const { return m_Actions; };
 };
