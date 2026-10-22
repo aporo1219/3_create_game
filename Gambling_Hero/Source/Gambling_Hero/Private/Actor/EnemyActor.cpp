@@ -14,6 +14,9 @@ AEnemyActor::AEnemyActor()
 void AEnemyActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UEnemyActionData* l_test =  SelectAction();
+	ExecuteAction(l_test);
 }
 
 /// <summary>
@@ -33,6 +36,8 @@ void AEnemyActor::SetData(UEnemyData* _EnemyData)
 	//変数の初期化
 	m_MaxHP = m_EnemyData->GetMaxHP();
 	m_CurrentHP = m_MaxHP;
+	m_Attack = m_EnemyData->GetAttackPower();
+	m_Defense = m_EnemyData->GetDefencePower();
 }
 
 /// <summary>
@@ -146,7 +151,7 @@ void AEnemyActor::ExecuteAction(UEnemyActionData* _Action)
 /// ダメージ処理関数
 /// </summary>
 /// <param name="_Damage"></param>
-void AEnemyActor::TakeDamage(int32 _Damage)
+void AEnemyActor::ApplyDamage(int32 _Damage)
 {
 	//ダメージ0またはHPが0の場合
 	if (_Damage <= 0 || m_CurrentHP  <= 0)
@@ -164,9 +169,4 @@ void AEnemyActor::TakeDamage(int32 _Damage)
 		m_CurrentHP,
 		m_MaxHP
 	);
-
-	if (m_CurrentHP <= 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Win"));
-	}
 }

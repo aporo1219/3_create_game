@@ -15,8 +15,6 @@ AEnemySpawer::AEnemySpawer()
 void AEnemySpawer::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Spawn();
 }
 
 // Called every frame

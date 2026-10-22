@@ -16,14 +16,54 @@ ABattleManager::ABattleManager()
 void ABattleManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//スポナーがあるかチェック
+	if (!m_EnemySpawner||!m_PlayerSpawner)
+	{
+		UE_LOG(LogTemp, Error, TEXT("NO_Spawner"));
+		return;
+	}
+
+	//スポナー生成
+	AEnemySpawer* l_SpawnerE =
+		GetWorld()->SpawnActor<AEnemySpawer>(
+			m_EnemySpawner,
+			GetActorLocation(),
+			GetActorRotation()
+		);
+
+	APlayerSpawner* l_SpawnerP =
+		GetWorld()->SpawnActor<APlayerSpawner>(
+			m_PlayerSpawner,
+			GetActorLocation(),
+			GetActorRotation()
+		);
+
+	//スポナーが生成されたか
+	if (!l_SpawnerE || !l_SpawnerP)
+	{
+			UE_LOG(LogTemp, Error, TEXT("No_Create_Spawner"));
+			return;
+	}
+
+	//敵の取得
+	m_Enemy = l_SpawnerE->Spawn();
+	//プレイヤーの取得
+	m_Player = l_SpawnerP->Spawn();
+
+	if (!m_Enemy || !m_Player)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Can't_Create_Actor"));
+		return;
+	}
+
+	StartBattle();
 }
 
 // Called every frame
 void ABattleManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 /// <summary>
@@ -38,6 +78,31 @@ void ABattleManager::StartBattle()
 	m_IsBattle = true;
 	m_TurnCount++;
 	m_BattleState = EBattleState::PLAYER_TURN;
+
+	//プレイヤーのサイコロ
+	m_DiceValue = m_Player->DiceProcess();
+	//プレイヤーの攻撃
+	AttackByPlayer(m_DiceValue);
+}
+
+/// <summary>
+/// プレイヤーの攻撃
+/// </summary>
+void ABattleManager::AttackByPlayer(int32 _DiceValue)
+{
+	int32 l_Result = BattleCalcuManager::CalcuDamage(_DiceValue, m_Enemy->GetDefense());
+
+	m_Enemy->ApplyDamage(l_Result);
+
+	//判定
+	JudeBattle();
+
+	//バトルが終了していなかったら進める
+	if (!m_IsBattle)
+		return; 
+
+	//ターン終了
+	EndPlayerTurn();
 }
 
 /// <summary>
@@ -58,15 +123,63 @@ void ABattleManager::EndPlayerTurn()
 void ABattleManager::StartEnemyTurn()
 {
 	m_BattleState = EBattleState::ENEMY_TURN;
+	AttackByEnemy();
+
+	if (!m_IsBattle)
+		return;
 
 	m_TurnCount++;
 	m_BattleState = EBattleState::PLAYER_TURN;
 }
 
 /// <summary>
+/// 敵の攻撃
+/// </summary>
+void ABattleManager::AttackByEnemy()
+{
+	int32 l_Result = BattleCalcuManager::CalcuDamage(m_Enemy->GetAttack(), m_Player->DiceProcess());
+	m_Player->ApplyDamage(l_Result);
+
+	//勝敗判定
+	JudeBattle();
+}	
+
+/// <summary>
 /// 戦闘の勝敗
 /// </summary>
 void ABattleManager::JudeBattle()
 {
+	if (!m_Enemy || !m_Player || !m_IsBattle)
+		return;
 
+	if (m_Enemy->GetCurrentHP() <= 0)
+	{
+		//プレイヤーの勝ち
+		Win();
+		return;
+	}
+	else if (m_Player->GetCurrentHP() <= 0)
+	{
+		//敵の勝ち
+		Lose();
+		return;
+	}
+}
+
+/// <summary>
+/// 勝利関数
+/// </summary>
+void ABattleManager::Win()
+{
+	m_IsBattle = false;
+	m_BattleState = EBattleState::VICTORY;
+}
+
+/// <summary>
+/// 敗北関数
+/// </summary>
+void ABattleManager::Lose()
+{
+	m_IsBattle = false;
+	m_BattleState = EBattleState::DEFEAT;
 }

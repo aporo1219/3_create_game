@@ -24,16 +24,22 @@ protected:
 	//敵のデータ
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "Enemy")
 	TObjectPtr<UEnemyData> m_EnemyData;
+
+private:
 	//最大HP
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Enemy")
-	int32 m_MaxHP;
+	int32 m_MaxHP{ 0 };
 	//現在のHP
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Enemy")
-	int32 m_CurrentHP;
+	int32 m_CurrentHP{ 0 };
+	//攻撃力
+	int32 m_Attack{ 0 };
+	//防御力
+	int32 m_Defense{ 0 };
 
 public:	
 	//取得関数
 	int32 GetCurrentHP() const {return m_CurrentHP;};
+	int32 GetAttack() const { return m_Attack; };
+	int32 GetDefense() const { return m_Defense; };
 
 	//敵の行動選択関数
 	UEnemyActionData* SelectAction();
@@ -42,5 +48,5 @@ public:
 	//データ取得関数
 	void SetData(UEnemyData* _EnemyData);
 	//ダメージ関数
-	void TakeDamage(int32 _Damage);
+	void ApplyDamage(int32 _Damage);
 };

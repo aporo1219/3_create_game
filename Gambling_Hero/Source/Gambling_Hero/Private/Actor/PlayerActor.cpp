@@ -42,7 +42,7 @@ void APlayerActor::Tick(float DeltaTime)
 /// ダメージ関数
 /// </summary>
 /// <param name="_Damage">ダメージ量</param>
-void APlayerActor::TakeDamage(int32 _Damage)
+void APlayerActor::ApplyDamage(int32 _Damage)
 {
 	//ダメージが0以下なら無効
 	if (_Damage <= 0)

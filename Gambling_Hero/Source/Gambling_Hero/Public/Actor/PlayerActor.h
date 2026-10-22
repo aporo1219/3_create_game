@@ -49,7 +49,7 @@ public:
 	int32 GetMoney() const { return m_Money; };
 
 	//ダメージ関数
-	void TakeDamage(int32 _Damage);
+	void ApplyDamage(int32 _Damage);
 	//お金の増減関数
 	void ChangeMoney(int32 _Amount);
 	//サイコロの処理関数

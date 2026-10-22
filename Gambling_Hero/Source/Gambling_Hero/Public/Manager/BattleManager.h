@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Actor/EnemySpawer.h"
+#include "Actor/PlayerSpawner.h"
+#include "Manager/BattleCalcuManager.h"
 #include "BattleManager.generated.h"
 
 //戦闘状態
@@ -42,6 +45,22 @@ private:
 	bool m_IsBattle{ false };
 	//ターン数
 	int32 m_TurnCount{ 0 };
+	//サイコロの値
+	int32 m_DiceValue{ 0 };
+	//敵取得
+	UPROPERTY()
+	TObjectPtr<AEnemyActor> m_Enemy;
+	//プレイヤーの取得
+	UPROPERTY()
+	TObjectPtr<APlayerActor> m_Player;
+
+protected:
+	//Spawner取得ポインター
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Battle")
+	TSubclassOf<AEnemySpawer> m_EnemySpawner;
+	//プレイヤー取得ポインター
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Battle")
+	TSubclassOf<APlayerSpawner> m_PlayerSpawner;
 
 public:
 	//取得関数
@@ -51,11 +70,18 @@ public:
 
 	//戦闘開始
 	void StartBattle();
+	//プレイヤーの攻撃
+	void AttackByPlayer(int32 _DiceValue);
 	//プレイヤーターン終わり
 	void EndPlayerTurn();
 	//敵のターン開始
 	void StartEnemyTurn();
+	//敵の攻撃
+	void AttackByEnemy();
 	//勝利判定
 	void JudeBattle();
-
+	//勝利
+	void Win();
+	//敗北
+	void Lose();
 };
