@@ -3,8 +3,8 @@
 
 #include "Controller/GamePlayerController.h"
 
-#include "Blueprint//UserWidget.h"
-#include "Kismet//GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 void AGamePlayerController::BeginPlay()
 {
@@ -24,18 +24,35 @@ void AGamePlayerController::BeginPlay()
 		)
 	);
 
-	//UIの表示(test)
-	if (m_BattleWidgetClass)
-	{
-		m_BattleWidget = CreateWidget<UUserWidget>(
-			this,
-			m_BattleWidgetClass
-		);
+	if (!m_BattleManager)
+		return;
 
-		if (m_BattleWidget)
-		{
-			m_BattleWidget->AddToViewport();
-		}
+	//UIの表示(test)
+	m_BattleWidget = CreateWidget<UBattleUI>(
+		this,
+		m_BattleWidgetClass
+	);
+
+	if (!m_BattleWidget)
+		return;
+
+	if (m_BattleWidget)
+	{
+		m_BattleWidget->AddToViewport();
+	}
+	
+	//UIマネジャーも追加
+	m_BattleUIManager = NewObject<UBattleUIManager>(this);
+
+	if (!m_BattleUIManager)
+		return;
+
+	//UIマネージ-の接続
+	m_BattleUIManager->Initialize(m_BattleWidget);
+
+	if (m_BattleManager && m_BattleUIManager)
+	{
+		m_BattleManager->SetBattleUIManager(m_BattleUIManager);
 	}
 
 }

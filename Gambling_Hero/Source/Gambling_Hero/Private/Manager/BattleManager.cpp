@@ -67,6 +67,16 @@ void ABattleManager::Tick(float DeltaTime)
 }
 
 /// <summary>
+/// バトルUIマネージャーの設定関数
+/// </summary>
+/// <param name="_UIManager"></param>
+void ABattleManager::SetBattleUIManager(
+	UBattleUIManager* _UIManager)
+{
+	m_BattleUIManager = _UIManager;
+}
+
+/// <summary>
 /// 戦闘開始
 /// </summary>
 void ABattleManager::StartBattle()

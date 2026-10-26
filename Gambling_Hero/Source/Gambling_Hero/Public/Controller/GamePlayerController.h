@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Manager/BattleManager.h"
+#include "UI_Manager/BattleUIManager.h"
 #include "GamePlayerController.generated.h"
 
 class UUSerWidget;
@@ -19,17 +20,19 @@ class GAMBLING_HERO_API AGamePlayerController : public APlayerController
 protected:
 	virtual void BeginPlay() override;
 
-	//表示するUIクラス
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UUserWidget> m_BattleWidgetClass;
-
 private:
 	//戦闘管理クラス
 	UPROPERTY()
 	TObjectPtr<ABattleManager> m_BattleManager;
-	//UI
+	//UIウィジェットクラス
+	UPROPERTY(EditDefaultsOnly,Category = "UI")
+	TSubclassOf<UUserWidget> m_BattleWidgetClass;
+	//生成したUIウィジェット
 	UPROPERTY()
-	TObjectPtr<UUserWidget> m_BattleWidget;
+	TObjectPtr<UBattleUI> m_BattleWidget;
+	//UI管理クラス
+	UPROPERTY()
+	TObjectPtr<UBattleUIManager> m_BattleUIManager;
 
 public:
 	//UIのボタンから呼び出し

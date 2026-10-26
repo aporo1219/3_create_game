@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "UI/BattleUI.h"
 #include "BattleUIManager.generated.h"
 
 /**
@@ -16,7 +17,7 @@ class GAMBLING_HERO_API UBattleUIManager : public UObject
 	
 public:
 	//初期化関数
-	void Initialize(class UUserWidget* _BattleWidget);
+	void Initialize(UBattleUI* _BattleWidget);
 	//プレイヤーHP更新関数
 	void UpdatePlayerHP(int32 _CurrentHP, int32 _MaxHP);
 	//敵のHP更新関数
@@ -33,5 +34,5 @@ public:
 private:
 	//操作対象ウィジェット
 	UPROPERTY()
-	TObjectPtr<UUserWidget> m_Widget;
+	TObjectPtr<UBattleUI> m_BattleWidget;
 };
