@@ -79,6 +79,25 @@ void ABattleManager::StartBattle()
 	m_TurnCount++;
 	m_BattleState = EBattleState::PLAYER_TURN;
 
+}
+
+/// <summary>
+/// UIの攻撃ボタン受け付け、処理に移行する関数
+/// </summary>
+void ABattleManager::RequestPlayerAttack()
+{
+	//戦闘中じゃない場合
+	if (!m_IsBattle)
+		return;
+
+	//プレイヤーのターンじゃない場合
+	if (m_BattleState != EBattleState::PLAYER_TURN)
+		return;
+
+	//プレイヤー、敵がいるか
+	if (!m_Player || !m_Enemy)
+		return;
+
 	//プレイヤーのサイコロ
 	m_DiceValue = m_Player->DiceProcess();
 	//プレイヤーの攻撃

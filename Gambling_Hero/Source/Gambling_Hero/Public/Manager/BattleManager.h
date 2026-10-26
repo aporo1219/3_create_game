@@ -70,6 +70,9 @@ public:
 
 	//戦闘開始
 	void StartBattle();
+	//UIのボタンを受け付け、攻撃開始関数
+	UFUNCTION(BlueprintCallable, Category = "Battle")
+	void RequestPlayerAttack();
 	//プレイヤーの攻撃
 	void AttackByPlayer(int32 _DiceValue);
 	//プレイヤーターン終わり
