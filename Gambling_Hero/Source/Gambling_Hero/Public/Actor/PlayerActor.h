@@ -47,6 +47,7 @@ public:
 	//æ“¾ŠÖ”
 	int32 GetCurrentHP() const { return m_CurrentHP; };
 	int32 GetMoney() const { return m_Money; };
+	int32 GetMaxHP() const { return m_MaxHP; };
 
 	//ƒ_ƒ[ƒWŠÖ”
 	void ApplyDamage(int32 _Damage);

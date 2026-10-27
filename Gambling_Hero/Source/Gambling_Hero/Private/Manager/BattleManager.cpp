@@ -77,6 +77,29 @@ void ABattleManager::SetBattleUIManager(
 }
 
 /// <summary>
+/// バトルUIの更新関数
+/// </summary>
+void ABattleManager::UpdateBattleUI()
+{
+	if (!m_BattleUIManager || !m_Player || !m_Enemy)
+		return;
+
+	//プレイヤーのHP
+	m_BattleUIManager->UpdatePlayerHP(
+		m_Player->GetCurrentHP(), m_Player->GetMaxHP());
+
+	//敵のHP
+	m_BattleUIManager->UpdateEnemyHP(
+		m_Enemy->GetCurrentHP(), m_Enemy->GetMaxHP());
+
+	//サイコロの値
+	m_BattleUIManager->UpdateDiceValue(m_DiceValue);
+
+	//お金
+	m_BattleUIManager->UpdateCoinValue(m_Player->GetMoney());
+}
+
+/// <summary>
 /// 戦闘開始
 /// </summary>
 void ABattleManager::StartBattle()
@@ -88,6 +111,14 @@ void ABattleManager::StartBattle()
 	m_IsBattle = true;
 	m_TurnCount++;
 	m_BattleState = EBattleState::PLAYER_TURN;
+
+	UpdateBattleUI();
+
+	if (m_BattleUIManager)
+	{
+		m_BattleUIManager->UpdateTurnText(
+			FText::FromString(TEXT("Player_Turn")));
+	}
 
 }
 
@@ -122,6 +153,9 @@ void ABattleManager::AttackByPlayer(int32 _DiceValue)
 	int32 l_Result = BattleCalcuManager::CalcuDamage(_DiceValue, m_Enemy->GetDefense());
 
 	m_Enemy->ApplyDamage(l_Result);
+
+	//UI更新
+	UpdateBattleUI();
 
 	//判定
 	JudeBattle();
@@ -168,6 +202,9 @@ void ABattleManager::AttackByEnemy()
 {
 	int32 l_Result = BattleCalcuManager::CalcuDamage(m_Enemy->GetAttack(), m_Player->DiceProcess());
 	m_Player->ApplyDamage(l_Result);
+
+	//UI更新
+	UpdateBattleUI();
 
 	//勝敗判定
 	JudeBattle();

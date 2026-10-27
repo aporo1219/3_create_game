@@ -53,6 +53,9 @@ void AGamePlayerController::BeginPlay()
 	if (m_BattleManager && m_BattleUIManager)
 	{
 		m_BattleManager->SetBattleUIManager(m_BattleUIManager);
+
+		//UIÚ‘±Œã‚É‰Šú•\Ž¦
+		m_BattleManager->UpdateBattleUI();
 	}
 
 }

@@ -77,6 +77,8 @@ public:
 	//UIのボタンを受け付け、攻撃開始関数
 	UFUNCTION(BlueprintCallable, Category = "Battle")
 	void RequestPlayerAttack();
+	//戦闘UIの表示更新関数
+	void UpdateBattleUI();
 	//UIマネージャー設定関数
 	void SetBattleUIManager(UBattleUIManager* _UIManager);
 	//プレイヤーの攻撃

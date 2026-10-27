@@ -38,6 +38,7 @@ private:
 public:	
 	//æ“¾ŠÖ”
 	int32 GetCurrentHP() const {return m_CurrentHP;};
+	int32 GetMaxHP() const { return m_MaxHP; };
 	int32 GetAttack() const { return m_Attack; };
 	int32 GetDefense() const { return m_Defense; };
 
