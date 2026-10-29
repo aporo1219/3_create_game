@@ -61,9 +61,9 @@ void AGamePlayerController::BeginPlay()
 }
 
 /// <summary>
-/// バトルUIのボタンから呼び出す
+/// バトルUIのボタンから攻撃処理を呼び出す
 /// </summary>
-void AGamePlayerController::CallActBattleUI()
+void AGamePlayerController::CallAttackBattleUI()
 {
 	if (!m_BattleManager)
 	{
@@ -72,5 +72,34 @@ void AGamePlayerController::CallActBattleUI()
 	}
 
 	//攻撃処理実行
-	m_BattleManager->RequestPlayerAttack();
+	m_BattleManager->RequestPlayerAction(EPlayerAction::ATTACK);
+}
+
+/// <summary>
+/// バトルUIのボタンから防御処理を呼び出す
+/// </summary>
+void AGamePlayerController::CallDefenseBattleUI()
+{
+	if (!m_BattleManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No_BattleManager"));
+		return;
+	}
+
+	//防御処理実行
+	m_BattleManager->RequestPlayerAction(EPlayerAction::DEFENSE);
+}
+
+/// <summary>
+/// バトルUIのボタンからベット処理を呼び出す
+/// </summary>
+void AGamePlayerController::CallGambleUI()
+{
+	if(!m_IsGamble)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No_BattleManager"));
+		return;
+	}
+
+	m_IsGamble = true;
 }

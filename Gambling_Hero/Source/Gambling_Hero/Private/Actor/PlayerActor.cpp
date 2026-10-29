@@ -129,3 +129,21 @@ int32 APlayerActor::DiceProcess()
 
 	return l_Result;
 }
+
+/// <summary>
+/// ‚¨‹à‚ÌŽx•¥‚¢
+/// </summary>
+/// <param name="_Amount">Žx•¥‚¢—Ê</param>
+/// <returns>‰Â”Û</returns>
+bool APlayerActor::PayMoney(int32 _Amount)
+{
+	if (_Amount <= 0 || m_Money < _Amount)
+	{
+		//‚¨‹à‚ªƒxƒbƒg—Ê‚æ‚è‚à¬‚³‚­,—Ê‚ª0ˆÈ‰º‚È‚ç‚Î‚Å‚«‚È‚¢
+		return false;
+	}
+
+	//ŠŽ‹à‚ðŒ¸‚ç‚·
+	m_Money -= _Amount;
+	return true;
+}

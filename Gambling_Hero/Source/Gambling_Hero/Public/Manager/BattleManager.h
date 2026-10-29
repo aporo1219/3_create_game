@@ -8,6 +8,7 @@
 #include "Actor/PlayerSpawner.h"
 #include "Manager/BattleCalcuManager.h"
 #include "UI_Manager/BattleUIManager.h"
+#include "Manager/PlayerActionManager.h"
 #include "BattleManager.generated.h"
 
 //戦闘状態
@@ -57,6 +58,14 @@ private:
 	//バトル中のUIを表示
 	UPROPERTY()
 	TObjectPtr<UBattleUIManager> m_BattleUIManager;
+	//プレイヤーの行動
+	UPROPERTY()
+	EPlayerAction m_PlayerAction{ EPlayerAction::NONE };
+	//防御値
+	int32 m_Defense{ 0 };
+	//プレイヤーアクションマネージャー
+	UPROPERTY()
+	TObjectPtr<UPlayerActionManager> m_PlayerActionManager;
 
 protected:
 	//Spawner取得ポインター
@@ -74,15 +83,13 @@ public:
 
 	//戦闘開始
 	void StartBattle();
-	//UIのボタンを受け付け、攻撃開始関数
+	//UIのボタンを受け付け、行動開始関数
 	UFUNCTION(BlueprintCallable, Category = "Battle")
-	void RequestPlayerAttack();
+	void RequestPlayerAction(EPlayerAction _Action);
 	//戦闘UIの表示更新関数
 	void UpdateBattleUI();
 	//UIマネージャー設定関数
 	void SetBattleUIManager(UBattleUIManager* _UIManager);
-	//プレイヤーの攻撃
-	void AttackByPlayer(int32 _DiceValue);
 	//プレイヤーターン終わり
 	void EndPlayerTurn();
 	//敵のターン開始

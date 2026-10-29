@@ -55,4 +55,8 @@ public:
 	void ChangeMoney(int32 _Amount);
 	//サイコロの処理関数
 	int32 DiceProcess();
+	//ベット可否
+	bool CanBet() const { return m_Money >= Constant::m_BetValue; };
+    //コインの支払い
+	bool PayMoney(int32 _Amount);
 };

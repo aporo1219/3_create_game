@@ -87,3 +87,15 @@ void UBattleUIManager::UpdateBattleResult(const FText& _ResultText)
 
 	m_BattleWidget->UpdateResult(_ResultText);
 }
+
+/// <summary>
+/// “G‚Ìs“®UI‚ÉÚ‘±
+/// </summary>
+/// <param name="_EnemyAction"></param>
+void UBattleUIManager::UpdateEnemyActionText(const FText& _EnemyAction)
+{
+	if (!m_BattleWidget)
+		return;
+
+	m_BattleWidget->UpdateEnemyAction(_EnemyAction);
+}

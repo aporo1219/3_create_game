@@ -57,6 +57,16 @@ void ABattleManager::BeginPlay()
 		return;
 	}
 
+	//プレイヤーアクションマネージャーの生成
+	m_PlayerActionManager =
+		NewObject<UPlayerActionManager>(this);
+
+	if (!m_PlayerActionManager)
+	{
+		UE_LOG(LogTemp, Error,
+			TEXT("Failed to create PlayerActionManager"));
+		return;
+	}
 	StartBattle();
 }
 
@@ -97,6 +107,7 @@ void ABattleManager::UpdateBattleUI()
 
 	//お金
 	m_BattleUIManager->UpdateCoinValue(m_Player->GetMoney());
+
 }
 
 /// <summary>
@@ -123,9 +134,9 @@ void ABattleManager::StartBattle()
 }
 
 /// <summary>
-/// UIの攻撃ボタン受け付け、処理に移行する関数
+/// UIのボタン受け付け、処理に移行する関数
 /// </summary>
-void ABattleManager::RequestPlayerAttack()
+void ABattleManager::RequestPlayerAction(EPlayerAction _Action)
 {
 	//戦闘中じゃない場合
 	if (!m_IsBattle)
@@ -139,32 +150,32 @@ void ABattleManager::RequestPlayerAttack()
 	if (!m_Player || !m_Enemy)
 		return;
 
-	//プレイヤーのサイコロ
-	m_DiceValue = m_Player->DiceProcess();
-	//プレイヤーの攻撃
-	AttackByPlayer(m_DiceValue);
-}
+	//行動の保存
+	m_PlayerAction = _Action;
 
-/// <summary>
-/// プレイヤーの攻撃
-/// </summary>
-void ABattleManager::AttackByPlayer(int32 _DiceValue)
-{
-	int32 l_Result = BattleCalcuManager::CalcuDamage(_DiceValue, m_Enemy->GetDefense());
+   //行動の実行
+	m_DiceValue = m_PlayerActionManager->ExecuteAction(
+		m_PlayerAction,
+		m_Player,
+		m_Enemy
+	);
 
-	m_Enemy->ApplyDamage(l_Result);
+	//防御値の保存
+	if (m_PlayerAction == EPlayerAction::DEFENSE)
+	{
+		m_Defense = m_DiceValue;
+	}
 
 	//UI更新
 	UpdateBattleUI();
 
-	//判定
+	//勝敗判定
 	JudeBattle();
 
-	//バトルが終了していなかったら進める
 	if (!m_IsBattle)
-		return; 
+		return;
 
-	//ターン終了
+	//敵のターン
 	EndPlayerTurn();
 }
 
@@ -186,6 +197,14 @@ void ABattleManager::EndPlayerTurn()
 void ABattleManager::StartEnemyTurn()
 {
 	m_BattleState = EBattleState::ENEMY_TURN;
+
+	if (m_BattleUIManager)
+	{
+		m_BattleUIManager->UpdateTurnText(
+			FText::FromString(TEXT("EnemyTurn"))
+		);
+	}
+
 	AttackByEnemy();
 
 	if (!m_IsBattle)
@@ -193,6 +212,13 @@ void ABattleManager::StartEnemyTurn()
 
 	m_TurnCount++;
 	m_BattleState = EBattleState::PLAYER_TURN;
+
+	if (m_BattleUIManager)
+	{
+		m_BattleUIManager->UpdateTurnText(
+			FText::FromString(TEXT("PlayerTurn"))
+		);
+	}
 }
 
 /// <summary>
@@ -200,14 +226,50 @@ void ABattleManager::StartEnemyTurn()
 /// </summary>
 void ABattleManager::AttackByEnemy()
 {
-	int32 l_Result = BattleCalcuManager::CalcuDamage(m_Enemy->GetAttack(), m_Player->DiceProcess());
-	m_Player->ApplyDamage(l_Result);
+	int32 l_Defense = 0;
+	bool l_IsPlayerGuard = false;
+
+	//敵の行動を保存
+	UEnemyActionData* l_Action = m_Enemy->SelectAction();
+
+	if (!l_Action)
+		return;
+
+	// 敵が選択した行動を表示
+	if (m_BattleUIManager)
+	{
+		m_BattleUIManager->UpdateEnemyActionText(
+			FText::Format(
+				FText::FromString(TEXT("EnemyAction:{0}")),
+				l_Action->GetActionName()
+			)
+		);
+	}
+
+	//プレイヤーが防御選択時
+	if (m_PlayerAction == EPlayerAction::DEFENSE)
+	{
+		l_Defense = m_Defense;
+		l_IsPlayerGuard = true;
+	}
+
+	//敵の行動
+	m_Enemy->ExecuteAction(
+		l_Action,
+		m_Player,
+		m_Defense,
+		l_IsPlayerGuard
+	);
 
 	//UI更新
 	UpdateBattleUI();
 
 	//勝敗判定
 	JudeBattle();
+
+	//防御のリセット
+	m_Defense = 0;
+	m_PlayerAction = EPlayerAction::NONE;
 }	
 
 /// <summary>

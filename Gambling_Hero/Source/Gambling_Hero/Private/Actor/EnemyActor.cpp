@@ -16,7 +16,6 @@ void AEnemyActor::BeginPlay()
 	Super::BeginPlay();
 
 	UEnemyActionData* l_test =  SelectAction();
-	ExecuteAction(l_test);
 }
 
 /// <summary>
@@ -120,28 +119,57 @@ UEnemyActionData* AEnemyActor::SelectAction()
 /// 敵の行動実行
 /// </summary>
 /// <param name="_Action">選択されたアクション</param>
-void AEnemyActor::ExecuteAction(UEnemyActionData* _Action)
+void AEnemyActor::ExecuteAction(
+	UEnemyActionData* _Action,
+	APlayerActor* _Player,
+    int32 _PlayerDefense,
+	bool _IsPlayerGuard)
 {
-	if (_Action == nullptr)
+	if (!_Action || !_Player)
 		return;
+
+	//ガードの解除
+	m_IsGuard = false;
 
 	switch (_Action->GetActionType())
 	{
 	case EEnemyActionType::Attack:
+	{
 		//攻撃
 		UE_LOG(LogTemp, Warning, TEXT("Attack"));
+
+		int32 l_Damage = BattleCalcuManager::CalcuDamage(
+			m_Attack, _PlayerDefense
+		);
+
+		//プレイヤーにダメージ
+		_Player->ApplyDamage(l_Damage);
 		break;
+	}
 
 	case EEnemyActionType::Defense:
+	{
 		//防御
 		UE_LOG(LogTemp, Warning, TEXT("Defense"));
-		break;
 
+		m_IsGuard = true;
+		break;
+	}
 	case EEnemyActionType::SpecialAttack:
+	{
 		//特殊攻撃
 		UE_LOG(LogTemp, Warning, TEXT("SpecialAttack"));
-		break;
+		//プレイヤーがガード時に特殊攻撃を無効
+		if (_IsPlayerGuard)
+		{
+			break;
+		}
 
+		int32 l_Damage = 0;
+
+		_Player->ApplyDamage(l_Damage);
+		break;
+	}
 	default:
 		break;
 	}
@@ -161,12 +189,4 @@ void AEnemyActor::ApplyDamage(int32 _Damage)
 	}
 
 	m_CurrentHP = FMath::Max(0, m_CurrentHP - _Damage);
-
-	UE_LOG(
-		LogTemp,
-		Warning,
-		TEXT("EnmeyHP: %d / %d"),
-		m_CurrentHP,
-		m_MaxHP
-	);
 }

@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Data/EnemyData.h"
+#include "Data/EnemyActionData.h"
 #include "Other/Constant.h"
+#include "Actor/PlayerActor.h"
+#include "Manager/BattleCalcuManager.h"
 #include "EnemyActor.generated.h"
 
 UCLASS()
@@ -34,18 +37,25 @@ private:
 	int32 m_Attack{ 0 };
 	//防御力
 	int32 m_Defense{ 0 };
-
+	//ガードしているか
+	bool m_IsGuard{ false };
 public:	
 	//取得関数
 	int32 GetCurrentHP() const {return m_CurrentHP;};
 	int32 GetMaxHP() const { return m_MaxHP; };
 	int32 GetAttack() const { return m_Attack; };
 	int32 GetDefense() const { return m_Defense; };
+	bool GetIsGuard() const { return m_IsGuard; };
 
 	//敵の行動選択関数
 	UEnemyActionData* SelectAction();
 	//行動実行関数
-	void ExecuteAction(UEnemyActionData* _Actiton);
+	void ExecuteAction(
+		UEnemyActionData* _Actiton,
+		APlayerActor* _Player,
+		int32 _PlayerDefense,
+		bool _IsPlayerGuard);
+
 	//データ取得関数
 	void SetData(UEnemyData* _EnemyData);
 	//ダメージ関数

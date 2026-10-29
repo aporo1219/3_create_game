@@ -30,6 +30,8 @@ public:
 	void UpdateTurnText(const FText& _TurnText);
 	//結果更新関数
 	void UpdateBattleResult(const FText& _ResultText);
+	//敵の行動更新関数
+	void UpdateEnemyActionText(const FText& _EnemyAction);
 
 private:
 	//操作対象ウィジェット

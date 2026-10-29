@@ -28,6 +28,8 @@ protected:
 	TObjectPtr<UTextBlock> m_TurnText;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> m_ResultText;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> m_EnemyActionText;
 
 public:
 	//プレイヤーHP更新関数
@@ -48,4 +50,7 @@ public:
 	//戦闘結果更新関数
 	UFUNCTION(BlueprintCallable,Category = "Battle_UI")
 	void UpdateResult(const FText& _ResultText);
+	//敵の行動更新関数
+	UFUNCTION(BlueprintCallable,Category = "Battle_UI")
+	void UpdateEnemyAction(const FText& _EnemyAction);
 };

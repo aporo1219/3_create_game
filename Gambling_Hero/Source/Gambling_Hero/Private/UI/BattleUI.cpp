@@ -85,4 +85,13 @@ void UBattleUI::UpdateResult(const FText& _Result)
 		m_ResultText->SetText(_Result);
 }
 
+/// <summary>
+/// “G‚Ìs“®XVˆ—
+/// </summary>
+/// <param name="_EnemyAction"></param>
+void UBattleUI::UpdateEnemyAction(const FText& _EnemyAction)
+{
+	if (m_EnemyActionText)
+		m_EnemyActionText->SetText(_EnemyAction);
+}
 
