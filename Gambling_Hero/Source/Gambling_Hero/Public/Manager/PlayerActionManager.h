@@ -33,4 +33,6 @@ public:
 		APlayerActor* _Player,
 		AEnemyActor* _Enemy
 	);
+
+	void ApplyAttackDamage(int32 _AttackValue, AEnemyActor* _Enemy);
 };

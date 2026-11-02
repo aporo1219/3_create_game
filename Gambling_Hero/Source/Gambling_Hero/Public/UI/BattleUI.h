@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
 #include "BattleUI.generated.h"
 
 class UTextBlock;
@@ -30,7 +31,15 @@ protected:
 	TObjectPtr<UTextBlock> m_ResultText;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> m_EnemyActionText;
-
+	//UMGのボタンとc++の接続
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> m_ButtonAttack;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> m_ButtonDefense;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> m_ButtonBet;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> m_ButtonNotBet;
 public:
 	//プレイヤーHP更新関数
 	UFUNCTION(BlueprintCallable,Category = "Battle_UI")
@@ -53,4 +62,10 @@ public:
 	//敵の行動更新関数
 	UFUNCTION(BlueprintCallable,Category = "Battle_UI")
 	void UpdateEnemyAction(const FText& _EnemyAction);
+	//	行動ボタンの制御
+	UFUNCTION(BlueprintCallable, Category = "Battle_UI")
+	void ControlActionButtons(bool _IsEnabled);
+	//	ベットボタンの制御
+	UFUNCTION(BlueprintCallable,Category ="Battle_UI")
+	void ControlBetlButtons(bool _IsEnabled);
 };

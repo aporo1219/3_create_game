@@ -99,3 +99,27 @@ void UBattleUIManager::UpdateEnemyActionText(const FText& _EnemyAction)
 
 	m_BattleWidget->UpdateEnemyAction(_EnemyAction);
 }
+
+/// <summary>
+/// UIアクションボタン制御関数
+/// </summary>
+/// <param name="_IsEnabled"></param>
+void UBattleUIManager::ControlActionButtonsEnabled(bool _IsEnabled)
+{
+	if (!m_BattleWidget)
+		return;
+	
+	m_BattleWidget->ControlActionButtons(_IsEnabled);
+}
+
+/// <summary>
+/// UIベットボタン制御関数
+/// </summary>
+/// <param name="_IsEnabled"></param>
+void UBattleUIManager::ControlBetButtonsEnabled(bool _IsEnabled)
+{
+	if (!m_BattleWidget)
+		return;
+
+	m_BattleWidget->ControlBetlButtons(_IsEnabled);
+}

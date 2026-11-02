@@ -95,3 +95,28 @@ void UBattleUI::UpdateEnemyAction(const FText& _EnemyAction)
 		m_EnemyActionText->SetText(_EnemyAction);
 }
 
+/// <summary>
+/// 行動UIボタンの制御関数
+/// </summary>
+/// <param name="_IsEnable"></param>
+void UBattleUI::ControlActionButtons(bool _IsEnable)
+{
+	if (m_ButtonAttack)
+		m_ButtonAttack->SetIsEnabled(_IsEnable);
+
+	if (m_ButtonDefense)
+		m_ButtonDefense->SetIsEnabled(_IsEnable);
+}
+
+/// <summary>
+/// ベットUIボタンの制御関数
+/// </summary>
+/// <param name="_IsEnable"></param>
+void UBattleUI::ControlBetlButtons(bool _IsEnable)
+{
+	if (m_ButtonBet)
+		m_ButtonBet->SetIsEnabled(_IsEnable);
+
+	if (m_ButtonNotBet)
+		m_ButtonNotBet->SetIsEnabled(_IsEnable);
+}

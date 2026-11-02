@@ -24,20 +24,8 @@ int32 UPlayerActionManager::ExecuteAction(
 	{
 	case EPlayerAction::ATTACK:
 	{
-		//サイコロをフル
-		int32 l_DiceValue = _Player->DiceProcess();
-		//ダメージ計算
-		int32 l_Damage =
-			BattleCalcuManager::CalcuDamage(
-				l_DiceValue,
-				_Enemy->GetDefense()
-			);
-
-		//敵にダメージ
-		_Enemy->ApplyDamage(l_Damage);
-
 		//攻撃値を渡す
-		return l_DiceValue;
+		return _Player->DiceProcess();
 	}
 
 	case EPlayerAction::DEFENSE:
@@ -49,4 +37,20 @@ int32 UPlayerActionManager::ExecuteAction(
 	default:
 		return 0;
 	}
+}
+
+void UPlayerActionManager::ApplyAttackDamage(
+	int32 _AttackValue,
+	AEnemyActor* _Enemy
+)
+{
+	if (!_Enemy)
+		return;
+
+	//ダメージの計算
+	int32 l_Damage =
+		BattleCalcuManager::CalcuDamage(_AttackValue, _Enemy->GetDefense());
+
+	//敵にダメージ
+	_Enemy->ApplyDamage(l_Damage);
 }

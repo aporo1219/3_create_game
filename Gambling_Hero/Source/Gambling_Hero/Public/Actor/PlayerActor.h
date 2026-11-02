@@ -35,7 +35,7 @@ protected:
 	int32 m_CurrentHP = 100;
 	//所持金
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Player")
-	int32 m_Money;
+	int32 m_Money{100};
 	//サイコロ管理クラス
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Player")
 	TObjectPtr<UDiseManager> m_DiceInventory;
@@ -56,7 +56,7 @@ public:
 	//サイコロの処理関数
 	int32 DiceProcess();
 	//ベット可否
-	bool CanBet() const { return m_Money >= Constant::m_BetValue; };
+	bool CanBet() const { return m_Money >= Constant::m_Bet_Value; };
     //コインの支払い
 	bool PayMoney(int32 _Amount);
 };

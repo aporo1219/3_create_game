@@ -19,5 +19,5 @@ public:
 	//サイコロ加算定数
 	static constexpr int32 m_SUCCES_BET{ 2 };
 	//ベット額
-	static constexpr int32 m_BetValue{ 10 };
+	static constexpr int32 m_Bet_Value{ 10 };
 };

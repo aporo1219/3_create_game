@@ -32,7 +32,10 @@ public:
 	void UpdateBattleResult(const FText& _ResultText);
 	//敵の行動更新関数
 	void UpdateEnemyActionText(const FText& _EnemyAction);
-
+	//UI行動ボタン制御関数
+	void ControlActionButtonsEnabled(bool _IsEnabled);
+	//UIベットボタン制御関数
+	void ControlBetButtonsEnabled(bool _IsEnabled);
 private:
 	//操作対象ウィジェット
 	UPROPERTY()

@@ -67,6 +67,11 @@ private:
 	UPROPERTY()
 	TObjectPtr<UPlayerActionManager> m_PlayerActionManager;
 
+	//ベット前の出目
+	int32 m_PreviousDiceValue{ 0 };
+	//ベット入力待ち
+	bool m_IsWaitingBet{ false };
+
 protected:
 	//Spawner取得ポインター
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Battle")
@@ -86,6 +91,10 @@ public:
 	//UIのボタンを受け付け、行動開始関数
 	UFUNCTION(BlueprintCallable, Category = "Battle")
 	void RequestPlayerAction(EPlayerAction _Action);
+	//ベットボタンが押されたとき
+	void RequestBet();
+	//プレイヤーの行動の確定
+	void ConfirmedPlayerAction();
 	//戦闘UIの表示更新関数
 	void UpdateBattleUI();
 	//UIマネージャー設定関数

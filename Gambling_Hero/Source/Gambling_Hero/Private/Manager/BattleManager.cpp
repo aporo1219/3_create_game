@@ -109,7 +109,6 @@ void ABattleManager::UpdateBattleUI()
 	m_BattleUIManager->UpdateCoinValue(m_Player->GetMoney());
 
 }
-
 /// <summary>
 /// 戦闘開始
 /// </summary>
@@ -131,6 +130,11 @@ void ABattleManager::StartBattle()
 			FText::FromString(TEXT("Player_Turn")));
 	}
 
+	if (m_BattleUIManager)
+	{
+		m_BattleUIManager->ControlActionButtonsEnabled(true);
+		m_BattleUIManager->ControlBetButtonsEnabled(false);
+	}
 }
 
 /// <summary>
@@ -138,16 +142,13 @@ void ABattleManager::StartBattle()
 /// </summary>
 void ABattleManager::RequestPlayerAction(EPlayerAction _Action)
 {
-	//戦闘中じゃない場合
-	if (!m_IsBattle)
+	//戦闘中じゃない場合,	プレイヤー、敵がいるか,プレイヤーのターンじゃない場合
+	if (!m_IsBattle || m_BattleState != EBattleState::PLAYER_TURN
+		|| !m_Player || !m_Enemy)
 		return;
 
-	//プレイヤーのターンじゃない場合
-	if (m_BattleState != EBattleState::PLAYER_TURN)
-		return;
-
-	//プレイヤー、敵がいるか
-	if (!m_Player || !m_Enemy)
+	//ベット待ち中は別の行動を受け付けない
+	if (m_IsWaitingBet)
 		return;
 
 	//行動の保存
@@ -160,10 +161,37 @@ void ABattleManager::RequestPlayerAction(EPlayerAction _Action)
 		m_Enemy
 	);
 
+	//攻撃の場合
+	if (m_PlayerAction == EPlayerAction::ATTACK)
+	{
+		//最初の出目を保存
+		m_PreviousDiceValue = m_DiceValue;
+
+		//ベット入力待ち
+		m_IsWaitingBet = true;
+
+		//UI更新
+		UpdateBattleUI();
+
+		if (m_BattleUIManager)
+		{
+			m_BattleUIManager->ControlActionButtonsEnabled(false);
+			m_BattleUIManager->ControlBetButtonsEnabled(true);
+		}
+
+		return;
+	}
+
 	//防御値の保存
 	if (m_PlayerAction == EPlayerAction::DEFENSE)
 	{
 		m_Defense = m_DiceValue;
+
+		UpdateBattleUI();
+
+		//防御の確定
+		ConfirmedPlayerAction();
+		return;
 	}
 
 	//UI更新
@@ -176,6 +204,78 @@ void ABattleManager::RequestPlayerAction(EPlayerAction _Action)
 		return;
 
 	//敵のターン
+	EndPlayerTurn();
+}
+/// <summary>
+/// ベット受付処理関数
+/// </summary>
+void ABattleManager::RequestBet()
+{
+	//ベット待ちじゃなければ受付しない
+	if (!m_IsBattle || m_BattleState != EBattleState::PLAYER_TURN
+		|| !m_Player || !m_Enemy || !m_IsWaitingBet ||
+		m_PlayerAction != EPlayerAction::ATTACK)
+		return;
+
+	//コインを払えるか
+	if (!m_Player->CanBet())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not enough money to bet"));
+		return;
+	}
+
+	//コインの支払い
+	if (!m_Player->PayMoney(Constant::m_Bet_Value))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not Money"));
+		return;
+	}
+	//2回目降る
+	int32 l_NewDiceValue = m_Player->DiceProcess();
+	//2回目の出目から最終攻撃値を計算
+	m_DiceValue = BattleCalcuManager::CalcuDice(
+		m_PreviousDiceValue, l_NewDiceValue, true);
+	//UI更新
+	UpdateBattleUI();
+   //敵のターンへ
+	ConfirmedPlayerAction();
+}
+
+/// <summary>
+/// プレイヤーの行動確定関数
+/// </summary>
+void ABattleManager::ConfirmedPlayerAction()
+{
+	if (!m_IsBattle || m_BattleState != EBattleState::PLAYER_TURN
+		|| !m_Player || !m_Enemy || !m_PlayerActionManager)
+		return;
+
+	//ベット待ちを解除
+	m_IsWaitingBet = false;
+
+	if (m_BattleUIManager)
+	{
+		m_BattleUIManager->ControlActionButtonsEnabled(false);
+		m_BattleUIManager->ControlBetButtonsEnabled(false);
+	}
+
+	//攻撃値の計算
+	if (m_PlayerAction == EPlayerAction::ATTACK)
+	{
+		m_PlayerActionManager->ApplyAttackDamage(m_DiceValue, m_Enemy);
+	}
+
+	//UI更新
+	UpdateBattleUI();
+
+	//勝敗判定
+	JudeBattle();
+
+	//戦闘終了
+	if (!m_IsBattle)
+		return;
+
+	//敵のターンへ
 	EndPlayerTurn();
 }
 
@@ -218,6 +318,9 @@ void ABattleManager::StartEnemyTurn()
 		m_BattleUIManager->UpdateTurnText(
 			FText::FromString(TEXT("PlayerTurn"))
 		);
+
+		m_BattleUIManager->ControlActionButtonsEnabled(true);
+		m_BattleUIManager->ControlBetButtonsEnabled(false);
 	}
 }
 

@@ -95,11 +95,27 @@ void AGamePlayerController::CallDefenseBattleUI()
 /// </summary>
 void AGamePlayerController::CallGambleUI()
 {
-	if(!m_IsGamble)
+	if (!m_BattleManager)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No_BattleManager"));
 		return;
 	}
 
-	m_IsGamble = true;
+	//ベット処理をbattlemanagerに依頼
+	m_BattleManager->RequestBet();
+}
+
+/// <summary>
+/// バトルUIのボタンからベットしない処理を呼び出す
+/// </summary>
+void AGamePlayerController::CallNoGambleUI()
+{
+	if (!m_BattleManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No_BattleManager"));
+		return;
+	}
+
+	//ベット処理をbattlemanagerに依頼
+	m_BattleManager->ConfirmedPlayerAction();
 }
