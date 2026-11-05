@@ -66,7 +66,6 @@ private:
 	//プレイヤーアクションマネージャー
 	UPROPERTY()
 	TObjectPtr<UPlayerActionManager> m_PlayerActionManager;
-
 	//ベット前の出目
 	int32 m_PreviousDiceValue{ 0 };
 	//ベット入力待ち
