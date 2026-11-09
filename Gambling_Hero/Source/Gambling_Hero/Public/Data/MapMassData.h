@@ -60,14 +60,19 @@ protected:
 
 public:
     //•Ï”æ“¾ŠÖ”
+    UFUNCTION(BlueprintPure, Category = "Map")
     EMapMassID GetMassID() const 
     { return m_MassID; };
+    UFUNCTION(BlueprintPure, Category = "Map")
     EMapMassType GetMassType() const
     { return m_MassType;};
+    UFUNCTION(BlueprintPure, Category = "Map")
     int32 GetFloor()   const
     { return m_Floor;};
+    UFUNCTION(BlueprintPure, Category = "Map")
     TArray<EMapMassID> GetMassIDs() const
     { return m_NextMassIDs; };
+    UFUNCTION(BlueprintPure, Category = "Map")
     FVector2D GetMassPos() const 
     { return m_Position; };
    

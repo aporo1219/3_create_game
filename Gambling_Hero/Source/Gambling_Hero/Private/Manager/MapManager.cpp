@@ -11,6 +11,13 @@ AMapManager::AMapManager()
 
 }
 
+void AMapManager::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Initialze();
+}
+
 /// <summary>
 /// 初期化関数
 /// </summary>
@@ -21,6 +28,9 @@ void AMapManager::Initialze()
 		UE_LOG(LogTemp, Warning, TEXT("MapData is NULL"));
 		return;
 	}
+
+	//マップデータの初期化
+	m_MapData->InitMass();
 
 	//STARTに設定
 	m_CurrentMassID = EMapMassID::START;
@@ -61,4 +71,29 @@ TArray<UMapMassData*> AMapManager::GetCanMoveMasses()const
 	}
 
 	return l_Result;
+}
+
+/// <summary>
+/// マスの移動関数
+/// </summary>
+/// <param name="_MassID"></param>
+/// <returns></returns>
+bool AMapManager::MoveToMass(EMapMassID _MassID)
+{
+	//移動可能なマスの取得
+	TArray<UMapMassData*> l_CanMoveMasses =
+		GetCanMoveMasses();
+
+	//現在地のマスの更新
+	for (UMapMassData* l_Mass : l_CanMoveMasses)
+	{
+		if (l_Mass && l_Mass->GetMassID() == _MassID)
+		{
+			//指定したIDがある場合現在マスのIDを更新
+			m_CurrentMassID = _MassID;
+			return true;
+		}
+	}
+
+	return false;
 }

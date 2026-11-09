@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Manager/BattleManager.h"
+#include "Manager/MapManager.h"
 #include "UI_Manager/BattleUIManager.h"
+#include "UI/MapUI.h"
 #include "GamePlayerController.generated.h"
 
 class UUSerWidget;
@@ -24,12 +26,21 @@ private:
 	//戦闘管理クラス
 	UPROPERTY()
 	TObjectPtr<ABattleManager> m_BattleManager;
-	//UIウィジェットクラス
+	//マップ管理クラス
+	UPROPERTY()
+	TObjectPtr<AMapManager> m_MapManager;
+	//バトルUIウィジェットクラス
 	UPROPERTY(EditDefaultsOnly,Category = "UI")
 	TSubclassOf<UUserWidget> m_BattleWidgetClass;
-	//生成したUIウィジェット
+	//マップUIウィジェットクラス
+	UPROPERTY(EditDefaultsOnly,Category = "UI")
+	TSubclassOf<UMapUI> m_MapWidgetClass;
+	//生成したバトルUIウィジェット
 	UPROPERTY()
 	TObjectPtr<UBattleUI> m_BattleWidget;
+	//生成したマップUIウィジェット
+	UPROPERTY()
+	TObjectPtr<UMapUI> m_MapWidget;
 	//UI管理クラス
 	UPROPERTY()
 	TObjectPtr<UBattleUIManager> m_BattleUIManager;

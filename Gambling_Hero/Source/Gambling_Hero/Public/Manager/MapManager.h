@@ -25,13 +25,18 @@ protected:
 	//マップデータ
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Map")
 	TObjectPtr<UMapData> m_MapData;
+	virtual void BeginPlay() override;
 
 public:	
 	//取得関数
 	EMapMassID GetCurrentMassID() const 
 	{ return m_CurrentMassID; };
+	UMapData* GetmapData() const { return m_MapData; };
 	//初期化関数
 	void Initialze();
 	//移動可能なマスを取得
 	TArray<UMapMassData*> GetCanMoveMasses() const;
+	//マップの移動
+	bool MoveToMass(EMapMassID _MassID);
+
 };

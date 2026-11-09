@@ -24,7 +24,14 @@ void AGamePlayerController::BeginPlay()
 		)
 	);
 
-	if (!m_BattleManager)
+	//MapManagerを取得
+	m_MapManager = Cast<AMapManager>(
+		UGameplayStatics::GetActorOfClass(
+			GetWorld(), AMapManager::StaticClass()
+		)
+	);
+
+	if (!m_BattleManager || !m_MapManager)
 		return;
 
 	//UIの表示(test)
@@ -33,13 +40,26 @@ void AGamePlayerController::BeginPlay()
 		m_BattleWidgetClass
 	);
 
-	if (!m_BattleWidget)
+	m_MapWidget = CreateWidget<UMapUI>(
+		this,
+		m_MapWidgetClass
+	);
+
+	if (!m_BattleWidget || !m_MapWidget)
 		return;
 
-	if (m_BattleWidget)
+	//マップマネージャーを渡す
+	m_MapWidget->InitializeMap(m_MapManager);
+
+	if (m_MapWidget)
 	{
-		m_BattleWidget->AddToViewport();
+		m_MapWidget->AddToViewport();
 	}
+
+	//if (m_BattleWidget)
+	//{
+	//	m_BattleWidget->AddToViewport();
+	//}
 	
 	//UIマネジャーも追加
 	m_BattleUIManager = NewObject<UBattleUIManager>(this);
