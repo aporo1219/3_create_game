@@ -10,6 +10,8 @@ void AGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UE_LOG(LogTemp, Warning, TEXT("GamePlayerController BeginPlay Called"));
+
 	//マウスカーソル表示
 	bShowMouseCursor = true;
 
@@ -31,9 +33,14 @@ void AGamePlayerController::BeginPlay()
 		)
 	);
 
-	if (!m_BattleManager || !m_MapManager)
-		return;
+	UE_LOG(LogTemp, Warning, TEXT("MapManager: %s"),
+		*GetNameSafe(m_MapManager));
 
+	if (!m_MapManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("MapManager Not Found"));
+		return;
+   }
 	//UIの表示(test)
 	m_BattleWidget = CreateWidget<UBattleUI>(
 		this,
@@ -45,15 +52,30 @@ void AGamePlayerController::BeginPlay()
 		m_MapWidgetClass
 	);
 
-	if (!m_BattleWidget || !m_MapWidget)
+	UE_LOG(LogTemp, Warning, TEXT("MapWidget: %s"),
+		*GetNameSafe(m_MapWidget));
+
+	if (!m_BattleWidget && !m_MapWidget)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NO_Widget"));
 		return;
+	}
+	
 
 	//マップマネージャーを渡す
 	m_MapWidget->InitializeMap(m_MapManager);
 
 	if (m_MapWidget)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("InitializeMap Start"));
+
+		m_MapWidget->InitializeMap(m_MapManager);
+
+		UE_LOG(LogTemp, Warning, TEXT("InitializeMap End"));
+
 		m_MapWidget->AddToViewport();
+
+		UE_LOG(LogTemp, Warning, TEXT("AddToViewport Success"));
 	}
 
 	//if (m_BattleWidget)

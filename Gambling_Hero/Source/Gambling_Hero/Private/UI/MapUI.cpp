@@ -9,6 +9,9 @@
 /// <param name="_MapManager"></param>
 void UMapUI::InitializeMap_Implementation(AMapManager* _MapManager)
 {
+	UE_LOG(LogTemp, Warning, TEXT("InitializeMap C++ Called"));
+
+
 	if (!_MapManager)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MapManager is NULL"));
@@ -16,4 +19,7 @@ void UMapUI::InitializeMap_Implementation(AMapManager* _MapManager)
 	}
 
 	m_MapManager = _MapManager;
+
+	UE_LOG(LogTemp, Warning, TEXT("MapManager Set Success"));
+
 }
