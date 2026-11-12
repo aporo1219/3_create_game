@@ -97,3 +97,27 @@ bool AMapManager::MoveToMass(EMapMassID _MassID)
 
 	return false;
 }
+
+/// <summary>
+///　指定したマスに移動可能か
+/// </summary>
+/// <param name="_MassID"></param>
+/// <returns></returns>
+bool AMapManager::CanMoveToMass(EMapMassID _MassID)const
+{
+	//移動可能なマスの取得
+	TArray<UMapMassData*> l_CanMoveMasses =
+		GetCanMoveMasses();
+
+	//現在地のマスの更新
+	for (UMapMassData* l_Mass : l_CanMoveMasses)
+	{
+		if (l_Mass && l_Mass->GetMassID() == _MassID)
+		{	
+			//指定したIDが存在するか
+			return true;
+		}
+	}
+
+	return false;
+}

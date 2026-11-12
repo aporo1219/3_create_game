@@ -37,6 +37,10 @@ public:
 	//移動可能なマスを取得
 	TArray<UMapMassData*> GetCanMoveMasses() const;
 	//マップの移動
+	UFUNCTION(BlueprintCallable)
 	bool MoveToMass(EMapMassID _MassID);
+	//指定したマスが移動可能か
+	UFUNCTION(BlueprintPure,Category = "Map")
+	bool CanMoveToMass(EMapMassID _MassID) const;
 
 };
