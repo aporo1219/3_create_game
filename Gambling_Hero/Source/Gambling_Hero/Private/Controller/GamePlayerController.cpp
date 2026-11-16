@@ -55,20 +55,18 @@ void AGamePlayerController::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("MapWidget: %s"),
 		*GetNameSafe(m_MapWidget));
 
-	if (!m_BattleWidget && !m_MapWidget)
+	if ( !m_MapWidget)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("NO_Widget"));
 		return;
 	}
 	
 
-	//マップマネージャーを渡す
-	m_MapWidget->InitializeMap(m_MapManager);
-
 	if (m_MapWidget)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("InitializeMap Start"));
 
+		//マップマネージャーを渡す
 		m_MapWidget->InitializeMap(m_MapManager);
 
 		UE_LOG(LogTemp, Warning, TEXT("InitializeMap End"));
@@ -78,10 +76,10 @@ void AGamePlayerController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("AddToViewport Success"));
 	}
 
-	//if (m_BattleWidget)
-	//{
-	//	m_BattleWidget->AddToViewport();
-	//}
+	/*if (m_BattleWidget)
+	{
+		m_BattleWidget->AddToViewport();
+	}*/
 	
 	//UIマネジャーも追加
 	m_BattleUIManager = NewObject<UBattleUIManager>(this);

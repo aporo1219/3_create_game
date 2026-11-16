@@ -62,7 +62,6 @@ TArray<UMapMassData*> AMapManager::GetCanMoveMasses()const
 	for (EMapMassID l_ID : l_NextIDs)
 	{
 		UMapMassData* l_Mass = m_MapData->GetMapMass(l_ID);
-
 		if (l_Mass)
 		{
 
@@ -80,14 +79,27 @@ TArray<UMapMassData*> AMapManager::GetCanMoveMasses()const
 /// <returns></returns>
 bool AMapManager::MoveToMass(EMapMassID _MassID)
 {
+	UE_LOG(LogTemp, Warning, TEXT("MoveToMass Called"));
+
+	UE_LOG(LogTemp, Warning, TEXT("Clicked ID: %d"), (int32)_MassID);
+
 	//移動可能なマスの取得
 	TArray<UMapMassData*> l_CanMoveMasses =
 		GetCanMoveMasses();
 
+	UE_LOG(LogTemp, Warning, TEXT("CanMoveMasses Num: %d"),
+		l_CanMoveMasses.Num());
+
 	//現在地のマスの更新
 	for (UMapMassData* l_Mass : l_CanMoveMasses)
 	{
-		if (l_Mass && l_Mass->GetMassID() == _MassID)
+		if (!l_Mass)
+			continue;
+
+		UE_LOG(LogTemp, Warning, TEXT("Available ID: %d"),
+			(int32)l_Mass->GetMassID());
+
+		if ( l_Mass->GetMassID() == _MassID)
 		{
 			//指定したIDがある場合現在マスのIDを更新
 			m_CurrentMassID = _MassID;
