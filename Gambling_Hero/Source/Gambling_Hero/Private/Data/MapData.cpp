@@ -31,7 +31,7 @@ void UMapData::InitMass()
 	l_Start->SetMassID(EMapMassID::START);
 	l_Start->SetMassType(EMapMassType::START);
 	l_Start->SetFloor(0);
-	l_Start->SetPosition(FVector2D(0, 0));
+	l_Start->SetPosition(FVector2D(200, 0));
 
 	//次のマス
 	TArray<EMapMassID> l_NextMasses;
@@ -45,7 +45,7 @@ void UMapData::InitMass()
 	l_Mass1->SetMassID(EMapMassID::MASS_1);
 	l_Mass1->SetMassType(EMapMassType::BATTLE);
 	l_Mass1->SetFloor(1);
-	l_Mass1->SetPosition(FVector2D(-200, 150));
+	l_Mass1->SetPosition(FVector2D(0, 150));
 
 	//次のマス
 	l_NextMasses.Empty();
@@ -58,7 +58,7 @@ void UMapData::InitMass()
 	l_Mass2->SetMassID(EMapMassID::MASS_2);
 	l_Mass2->SetMassType(EMapMassType::TREASURE);
 	l_Mass2->SetFloor(1);
-	l_Mass2->SetPosition(FVector2D(200, 150));
+	l_Mass2->SetPosition(FVector2D (400, 150));
 
 	//次のマス
 	l_NextMasses.Empty();
@@ -71,7 +71,7 @@ void UMapData::InitMass()
 	l_Mass3->SetMassID(EMapMassID::MASS_3);
 	l_Mass3->SetMassType(EMapMassType::BATTLE);
 	l_Mass3->SetFloor(2);
-	l_Mass3->SetPosition(FVector2D(-200, 300));
+	l_Mass3->SetPosition(FVector2D(0, 300));
 
 	//次のマス
 	l_NextMasses.Empty();
@@ -84,7 +84,7 @@ void UMapData::InitMass()
 	l_Mass4->SetMassID(EMapMassID::MASS_4);
 	l_Mass4->SetMassType(EMapMassType::REST);
 	l_Mass4->SetFloor(2);
-	l_Mass4->SetPosition(FVector2D(200, 300));
+	l_Mass4->SetPosition(FVector2D(400, 300));
 
 	//次のマス
 	l_NextMasses.Empty();
@@ -97,7 +97,7 @@ void UMapData::InitMass()
 	l_Boss->SetMassID(EMapMassID::BOSS);
 	l_Boss->SetMassType(EMapMassType::BOSS);
 	l_Boss->SetFloor(3);
-	l_Boss->SetPosition(FVector2D(0, 450));
+	l_Boss->SetPosition(FVector2D(200, 450));
 }
 
 /// <summary>

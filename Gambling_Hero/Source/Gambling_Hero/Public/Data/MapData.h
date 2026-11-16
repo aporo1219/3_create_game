@@ -27,4 +27,9 @@ public:
 	void InitMass();
 	//マス取得関数
 	UMapMassData* GetMapMass(EMapMassID _ID)const;
+	//全マス取得関数
+	const TArray<TObjectPtr<UMapMassData>>& GetMapMasses()const
+	{
+		return m_MapMasses;
+	};
 };

@@ -2,16 +2,14 @@
 
 
 #include "UI/MapUI.h"
+#include "Components/CanvasPanel.h"
 
 /// <summary>
 /// ƒ}ƒbƒv‚Ì‰Šú‰»ŠÖ”
 /// </summary>
 /// <param name="_MapManager"></param>
-void UMapUI::InitializeMap_Implementation(AMapManager* _MapManager)
+void UMapUI::InitializeMap(AMapManager* _MapManager)
 {
-	UE_LOG(LogTemp, Warning, TEXT("InitializeMap C++ Called"));
-
-
 	if (!_MapManager)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MapManager is NULL"));
@@ -22,4 +20,14 @@ void UMapUI::InitializeMap_Implementation(AMapManager* _MapManager)
 
 	UE_LOG(LogTemp, Warning, TEXT("MapManager Set Success"));
 
+	InitMap();
+}
+
+void UMapUI::InitMap()
+{
+	if (!m_MapManager || !m_MapCanvas)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InitMap Failed"));
+		return;
+	}
 }
