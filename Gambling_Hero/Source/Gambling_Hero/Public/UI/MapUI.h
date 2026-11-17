@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Manager/MapManager.h"
+#include "UI/UMapMAssUI.h"
 #include "MapUI.generated.h"
 
 /**
@@ -18,6 +19,11 @@ UCLASS()
 class GAMBLING_HERO_API UMapUI : public UUserWidget
 {
 	GENERATED_BODY()
+
+private:
+	//生成したマスUIを管理
+	UPROPERTY()
+	TArray<TObjectPtr<UUMapMassUI>> m_MassUIs;
 
 protected:
 	//マップマネージャー
@@ -37,4 +43,7 @@ public:
 
 	//マップ作成
 	void InitMap();
+
+	//移動可能マスの状態を一括更新
+	void UpdateAllMoveStates();
 };

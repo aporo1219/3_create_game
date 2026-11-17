@@ -3,6 +3,7 @@
 
 #include "UI/MapUI.h"
 #include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
 
 /// <summary>
 /// マップの初期化関数
@@ -23,11 +24,90 @@ void UMapUI::InitializeMap(AMapManager* _MapManager)
 	InitMap();
 }
 
+/// <summary>
+/// マップに初期化
+/// </summary>
 void UMapUI::InitMap()
 {
+	m_MassUIs.Empty();
+
 	if (!m_MapManager || !m_MapCanvas)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("InitMap Failed"));
 		return;
+	}
+
+	//データの取得
+	UMapData* l_MapData = m_MapManager->GetmapData();
+
+	if (!l_MapData)
+		return;
+
+	//既存マスを削除
+	m_MapCanvas->ClearChildren();
+
+	//全マス取得
+	const TArray<TObjectPtr<UMapMassData>>& l_Masses =
+		l_MapData->GetMapMasses();
+
+	//全マスの取得
+	for (UMapMassData* l_MassData : l_Masses)
+	{
+		if (!l_MassData)
+			continue;
+
+		//マスUI作成
+		UUMapMassUI* l_MassUI =
+			CreateWidget<UUMapMassUI>(
+				GetOwningPlayer(),
+				m_MassUIClass
+			);
+
+		if (!l_MassUI)
+			continue;
+
+		//マスの情報を設定
+		l_MassUI->InitializeMass(
+			l_MassData,
+			m_MapManager,
+			this
+		);
+
+		//配列に追加
+		m_MassUIs.Add(l_MassUI);
+
+		//キャンバスの追加
+		UCanvasPanelSlot* l_Slot =
+			m_MapCanvas->AddChildToCanvas(l_MassUI);
+
+		if (!l_Slot)
+			continue;
+
+		//マスの配置
+		l_Slot->SetPosition(l_MassData->GetMassPos());
+
+		//マスの中心座標に合わせる
+		l_Slot->SetAlignment(FVector2D(0.5f,0.5f));
+
+		UE_LOG(
+			LogTemp,
+			Warning,
+			TEXT("Mass Created: %d"),
+			static_cast<int32>(l_MassData->GetMassID())
+		);
+	}
+}
+
+/// <summary>
+/// 全マスの状態を更新関数
+/// </summary>
+void UMapUI::UpdateAllMoveStates()
+{
+	for (UUMapMassUI* l_MassUI : m_MassUIs)
+	{
+		if (!l_MassUI)
+			continue;
+
+		l_MassUI->UpdateMoveState();
 	}
 }

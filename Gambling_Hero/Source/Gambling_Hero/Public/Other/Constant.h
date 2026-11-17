@@ -20,4 +20,6 @@ public:
 	static constexpr int32 m_SUCCES_BET{ 2 };
 	//ベット額
 	static constexpr int32 m_Bet_Value{ 10 };
+	//マスの中心座標
+	static constexpr double m_MASS_CENTER_POINT{ 0.5f };
 };

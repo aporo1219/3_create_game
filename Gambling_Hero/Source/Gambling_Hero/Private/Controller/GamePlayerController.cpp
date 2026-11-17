@@ -71,7 +71,7 @@ void AGamePlayerController::BeginPlay()
 
 		UE_LOG(LogTemp, Warning, TEXT("InitializeMap End"));
 
-		m_MapWidget->AddToViewport();
+		m_MapWidget->AddToViewport(10);
 
 		UE_LOG(LogTemp, Warning, TEXT("AddToViewport Success"));
 	}

@@ -2,7 +2,7 @@
 
 
 #include "UI/UMapMassUI.h"
-
+#include "UI/MapUI.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Manager/MapManager.h"
@@ -14,7 +14,8 @@
 /// <param name="_MapManager"></param>
 void UUMapMassUI::InitializeMass(
 	UMapMassData* _MassData,
-	AMapManager* _MapManager
+	AMapManager* _MapManager,
+	UMapUI* _MapUI
 )
 {
 	if (!_MassData || !_MapManager)
@@ -24,6 +25,7 @@ void UUMapMassUI::InitializeMass(
 	}
 
 	m_MapManager = _MapManager;
+	m_MapUI = _MapUI;
 
 	m_MassID = _MassData->GetMassID();
 	m_MassType = _MassData->GetMassType();
@@ -35,6 +37,12 @@ void UUMapMassUI::InitializeMass(
 
 		m_MassButton->OnClicked.AddDynamic(
 			this, &UUMapMassUI::OnMassClicked);
+
+		UE_LOG(LogTemp, Warning, TEXT("Button Bind Success"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("MassButton NULL"));
 	}
 
 	if (m_MassText)
@@ -86,6 +94,15 @@ void UUMapMassUI::UpdateMoveState()
 	bool l_CanMove =
 		m_MapManager->CanMoveToMass(m_MassID);
 
+	UE_LOG(
+		LogTemp,
+		Warning,
+		TEXT("MassID: %d / CanMove: %d"),
+		(int32)m_MassID,
+		l_CanMove
+	);
+
+
 	m_MassButton->SetIsEnabled(l_CanMove);
 }
 
@@ -94,15 +111,26 @@ void UUMapMassUI::UpdateMoveState()
 /// </summary>
 void UUMapMassUI::OnMassClicked()
 {
-	if (!m_MapManager)
+	UE_LOG(LogTemp, Warning, TEXT("Button Clicked"));
+
+	if (!m_MapManager || !m_MapUI)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MapManager NULL"));
 		return;
 	}
 
+	UE_LOG(
+		LogTemp,
+		Warning,
+		TEXT("Clicked MassID: %d"),
+		(int32)m_MassID
+	);
+
 	if (m_MapManager->MoveToMass(m_MassID))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Move To Mass Success"));
+		//全マスの移動可能状態を更新
+		m_MapUI->UpdateAllMoveStates();
 	}
 	else
 	{

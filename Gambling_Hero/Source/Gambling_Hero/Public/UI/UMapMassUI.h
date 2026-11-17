@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Data/MapMassData.h"
+#include "Other/Constant.h"
 #include "UMapMassUI.generated.h"
 
 class UButton;
 class UTextBlock;
 class AMapManager;
+class UMapUI;
 
 /**
  * 
@@ -32,6 +34,10 @@ protected:
 	UPROPERTY()
 	TObjectPtr<AMapManager> m_MapManager;
 
+	//マップUI
+	UPROPERTY()
+	TObjectPtr<UMapUI> m_MapUI;
+
 	//マスID
 	UPROPERTY()
 	EMapMassID m_MassID{ EMapMassID::NONE };
@@ -48,7 +54,8 @@ public:
 	//マスの初期化
 	void InitializeMass(
 		UMapMassData* _MassData,
-		AMapManager* _Manager
+		AMapManager* _Manager,
+		UMapUI* _MapUI
 	);
 
 	//移動可能状態更新
