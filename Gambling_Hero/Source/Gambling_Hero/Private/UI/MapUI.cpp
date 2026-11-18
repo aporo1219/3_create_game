@@ -86,15 +86,15 @@ void UMapUI::InitMap()
 		//マスの配置
 		l_Slot->SetPosition(l_MassData->GetMassPos());
 
+		// マスのサイズを設定
+		l_Slot->SetSize(FVector2D(120.0f, 80.0f));
+
 		//マスの中心座標に合わせる
 		l_Slot->SetAlignment(FVector2D(0.5f,0.5f));
 
-		UE_LOG(
-			LogTemp,
-			Warning,
-			TEXT("Mass Created: %d"),
-			static_cast<int32>(l_MassData->GetMassID())
-		);
+		// 表示・入力を有効化
+		l_MassUI->SetVisibility(ESlateVisibility::Visible);
+		l_MassUI->SetIsEnabled(true);
 	}
 }
 
