@@ -111,29 +111,18 @@ void UUMapMassUI::UpdateMoveState()
 /// </summary>
 void UUMapMassUI::OnMassClicked()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Button Clicked"));
-
 	if (!m_MapManager || !m_MapUI)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("MapManager NULL"));
 		return;
 	}
 
-	UE_LOG(
-		LogTemp,
-		Warning,
-		TEXT("Clicked MassID: %d"),
-		(int32)m_MassID
-	);
-
 	if (m_MapManager->MoveToMass(m_MassID))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Move To Mass Success"));
 		//全マスの移動可能状態を更新
 		m_MapUI->UpdateAllMoveStates();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Move To Mass Failed"));
+		//マスのイベント実行
+		m_MapUI->ExecuteMassEvent(m_MassType);
 	}
 }

@@ -4,6 +4,7 @@
 #include "UI/MapUI.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Controller/GamePlayerController.h"
 
 /// <summary>
 /// マップの初期化関数
@@ -110,4 +111,20 @@ void UMapUI::UpdateAllMoveStates()
 
 		l_MassUI->UpdateMoveState();
 	}
+}
+
+/// <summary>
+/// マスのイベント実行
+/// </summary>
+/// <param name="_MassType"></param>
+void UMapUI::ExecuteMassEvent(EMapMassType _MassType)
+{
+	AGamePlayerController* l_Controller =
+		Cast<AGamePlayerController>(GetOwningPlayer());
+
+	if (!l_Controller)
+		return;
+
+	//コントローラーのマス実行関数を呼び出す
+	l_Controller->ExecuteMapEvent(_MassType);
 }

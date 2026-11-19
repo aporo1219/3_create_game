@@ -67,7 +67,6 @@ void ABattleManager::BeginPlay()
 			TEXT("Failed to create PlayerActionManager"));
 		return;
 	}
-	StartBattle();
 }
 
 // Called every frame
@@ -404,6 +403,10 @@ void ABattleManager::Win()
 {
 	m_IsBattle = false;
 	m_BattleState = EBattleState::VICTORY;
+	m_Result = EBattleResult::VICTORY;
+	m_BattleUIManager->HideBattleUI();
+	ShowResult(m_Result);
+
 }
 
 /// <summary>
@@ -413,4 +416,17 @@ void ABattleManager::Lose()
 {
 	m_IsBattle = false;
 	m_BattleState = EBattleState::DEFEAT;
+	m_Result = EBattleResult::DEFEAT;
+	m_BattleUIManager->HideBattleUI();
+	ShowResult(m_Result);
+}
+
+/// <summary>
+/// ƒŠƒUƒ‹ƒg‰æ–Ê•\¦ŠÖ”
+/// </summary>
+/// <param name="_Result"></param>
+void ABattleManager::ShowResult(EBattleResult _Result)
+{
+	if (m_ResultManager)
+		m_ResultManager->ShowResult(_Result);
 }

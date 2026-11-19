@@ -36,6 +36,8 @@ public:
 	void ControlActionButtonsEnabled(bool _IsEnabled);
 	//UIベットボタン制御関数
 	void ControlBetButtonsEnabled(bool _IsEnabled);
+	//バトルUIを隠す関数
+	void HideBattleUI();
 private:
 	//操作対象ウィジェット
 	UPROPERTY()

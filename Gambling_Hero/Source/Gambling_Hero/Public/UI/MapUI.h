@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Manager/MapManager.h"
-#include "UI/UMapMAssUI.h"
+#include "UI/UMapMassUI.h"
 #include "MapUI.generated.h"
 
 /**
@@ -46,4 +46,7 @@ public:
 
 	//移動可能マスの状態を一括更新
 	void UpdateAllMoveStates();
+
+	//マス実行関数
+	void ExecuteMassEvent(EMapMassType _MassType);
 };

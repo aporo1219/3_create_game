@@ -6,53 +6,27 @@
 #include "Components/Button.h"
 
 /// <summary>
-/// リザルトUIの制御関数
+/// リザルトの更新関数
 /// </summary>
 /// <param name="_Result"></param>
-//void UResultUI::ShowResult(EBattleResult _Result)
-//{
-//	//m_Result = _Result;
-//
-//	//if (!m_Button1 || !m_Button2 ||
-//	//	!m_ResultTitle || !m_ResultMessage)
-//	//	return;
-//
-//	////勝敗のの場合分け
-//	//switch (m_Result)
-//	//{
-//	//case EBattleResult::VICTORY:
-//	//	//勝利時のテキスト
-//	//	m_ResultTitle->SetText(
-//	//		FText::FromString(TEXT("VICTORY"))
-//	//	);
-//
-//	//	m_ResultMessage->SetText(
-//	//		FText::FromString(TEXT("Defeat_Enemy"))
-//	//	);
-//
-//	//	//ボタン
-//	//	m_Button1->SetIsEnabled(true);
-//	//	break;
-//
-//	//case EBattleResult::DEFEAT:
-//	//	//敗北時時のテキスト
-//	//	m_ResultTitle->SetText(
-//	//		FText::FromString(TEXT("DEFEAT"))
-//	//	);
-//
-//	//	m_ResultMessage->SetText(
-//	//		FText::FromString(TEXT("You_Have_Die"))
-//	//	);
-//
-//	//	//ボタン
-//	//	m_Button1->SetIsEnabled(true);
-//	//	break;
-//
-//	//case EBattleResult::NONE:
-//	//default:
-//	//	return;
-//	//}
-//
-//	//m_Button2->SetIsEnabled(true);
-//}
+void UResultUI::UpdateResult(EBattleResult _Result)
+{
+	if (!m_ResultText)
+		return;
 
+	switch (_Result)
+	{
+	case EBattleResult::NONE:
+		break;
+	case EBattleResult::VICTORY:
+		m_ResultText->SetText(
+			FText::FromString(TEXT("VICTORY")));
+		break;
+	case EBattleResult::DEFEAT:
+		m_ResultText->SetText(
+			FText::FromString(TEXT("DEFEAT")));
+		break;
+	default:
+		break;
+	}
+}

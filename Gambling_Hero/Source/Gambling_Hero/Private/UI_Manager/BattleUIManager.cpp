@@ -123,3 +123,14 @@ void UBattleUIManager::ControlBetButtonsEnabled(bool _IsEnabled)
 
 	m_BattleWidget->ControlBetlButtons(_IsEnabled);
 }
+
+/// <summary>
+/// ƒoƒgƒ‹UI‚ð‰B‚·
+/// </summary>
+void UBattleUIManager::HideBattleUI()
+{
+	if (m_BattleWidget)
+		m_BattleWidget->SetVisibility(
+			ESlateVisibility::Collapsed
+		);
+}

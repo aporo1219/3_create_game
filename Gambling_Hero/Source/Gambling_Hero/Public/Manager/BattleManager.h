@@ -9,6 +9,7 @@
 #include "Manager/BattleCalcuManager.h"
 #include "UI_Manager/BattleUIManager.h"
 #include "Manager/PlayerActionManager.h"
+#include "Manager/ResultManager.h"
 #include "BattleManager.generated.h"
 
 //戦闘状態
@@ -70,7 +71,11 @@ private:
 	int32 m_PreviousDiceValue{ 0 };
 	//ベット入力待ち
 	bool m_IsWaitingBet{ false };
-
+	//ResultManager
+	UPROPERTY()
+	TObjectPtr<AResultManager> m_ResultManager;
+	//勝敗
+	EBattleResult m_Result{ EBattleResult::NONE };
 protected:
 	//Spawner取得ポインター
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Battle")
@@ -110,4 +115,8 @@ public:
 	void Win();
 	//敗北
 	void Lose();
+	//リザルトマネージャーに設定関数
+	void SetResultManager(AResultManager* _ResultManager) { m_ResultManager = _ResultManager; };
+	//リザルト表示関数
+	void ShowResult(EBattleResult _Result);
 };

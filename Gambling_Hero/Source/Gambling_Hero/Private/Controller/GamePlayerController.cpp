@@ -33,15 +33,16 @@ void AGamePlayerController::BeginPlay()
 		)
 	);
 
-	UE_LOG(LogTemp, Warning, TEXT("MapManager: %s"),
-		*GetNameSafe(m_MapManager));
+	//ResultManagerを取得
+	m_ResultManager = Cast<AResultManager>(
+		UGameplayStatics::GetActorOfClass(
+			GetWorld(), AResultManager::StaticClass()
+		)
+	);
 
-	if (!m_MapManager)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("MapManager Not Found"));
+	if (!m_MapManager || !m_BattleManager || !m_ResultManager)
 		return;
-   }
-	//UIの表示(test)
+
 	m_BattleWidget = CreateWidget<UBattleUI>(
 		this,
 		m_BattleWidgetClass
@@ -52,35 +53,28 @@ void AGamePlayerController::BeginPlay()
 		m_MapWidgetClass
 	);
 
-	UE_LOG(LogTemp, Warning, TEXT("MapWidget: %s"),
-		*GetNameSafe(m_MapWidget));
-
-	if ( !m_MapWidget)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NO_Widget"));
-		return;
-	}
+	m_ResultlWidget = CreateWidget<UResultUI>(
+		this,
+		m_ResultWidgetClass
+	);
 	
 
 	if (m_MapWidget)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("InitializeMap Start"));
-
+	{ 
 		//マップマネージャーを渡す
 		m_MapWidget->InitializeMap(m_MapManager);
+		m_MapWidget->AddToViewport(Constant::m_UI_PRI);
+	}
+	
+	if (m_ResultlWidget)
+	{
+		m_ResultlWidget->AddToViewport(Constant::m_UI_PRI);
+		m_ResultlWidget->SetVisibility(ESlateVisibility::Collapsed);
 
-		UE_LOG(LogTemp, Warning, TEXT("InitializeMap End"));
-
-		m_MapWidget->AddToViewport(10);
-
-		UE_LOG(LogTemp, Warning, TEXT("AddToViewport Success"));
+		// ResultManagerにUIを渡す
+		m_ResultManager->SetResultUI(m_ResultlWidget);
 	}
 
-	/*if (m_BattleWidget)
-	{
-		m_BattleWidget->AddToViewport();
-	}*/
-	
 	//UIマネジャーも追加
 	m_BattleUIManager = NewObject<UBattleUIManager>(this);
 
@@ -93,7 +87,7 @@ void AGamePlayerController::BeginPlay()
 	if (m_BattleManager && m_BattleUIManager)
 	{
 		m_BattleManager->SetBattleUIManager(m_BattleUIManager);
-
+		m_BattleManager->SetResultManager(m_ResultManager);
 		//UI接続後に初期表示
 		m_BattleManager->UpdateBattleUI();
 	}
@@ -158,4 +152,50 @@ void AGamePlayerController::CallNoGambleUI()
 
 	//ベット処理をbattlemanagerに依頼
 	m_BattleManager->ConfirmedPlayerAction();
+}
+
+/// <summary>
+/// それぞれのマス実行関数
+/// </summary>
+/// <param name="_MassType"></param>
+void AGamePlayerController::ExecuteMapEvent(EMapMassType _MassType)
+{
+	switch (_MassType)
+	{
+    //バトル
+	case EMapMassType::BATTLE:
+		//マップUIを非表示
+		HideMapUI();
+
+		//バトルUI表示
+		if (m_BattleWidget)
+		{
+			m_BattleWidget->SetVisibility(
+				ESlateVisibility::Visible
+			);
+
+			m_BattleWidget->AddToViewport(Constant::m_UI_PRI);
+		}
+
+		//バトル開始
+		if (m_BattleManager)
+		{
+			m_BattleManager->StartBattle();
+		}
+
+		break;
+	}
+}
+
+/// <summary>
+/// マップUIを非表示
+/// </summary>
+void AGamePlayerController::HideMapUI()
+{
+	if (m_MapWidget)
+	{
+		m_MapWidget->SetVisibility(
+			ESlateVisibility::Collapsed
+		);
+	}
 }
